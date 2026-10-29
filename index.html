@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#091523">
+  <meta name="description" content="PROJECT GPT — Chapter 2 Season 2. A playable original 3D Battle Royale prototype.">
+  <title>PROJECT GPT — CHAPTER 2 SEASON 2</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.webmanifest">
+</head>
+<body>
+  <div id="stage"></div>
+  <div id="loading" class="overlay loading"><div class="loadbox"><div class="mark">PG</div><h1>PROJECT <em>GPT</em></h1><p>CHAPTER 2 · SEASON 2</p><div class="loadtrack"><span id="loadBar"></span></div><div id="loadLabel">Loading world…</div></div></div>
+  <section id="lobby" class="overlay hidden" aria-label="Main menu">
+    <div class="lobbyShade"></div>
+    <div class="lobbyLayout">
+      <div class="brandBlock"><div class="eyebrow"><span class="liveDot"></span> ORIGINAL 3D BATTLE ROYALE · V1</div><div class="logo">PROJECT <span>GPT</span></div><div class="chapter">CHAPTER 2 <b>SEASON 2</b></div><p class="tagline">DROP IN. GEAR UP. BE THE LAST ONE.</p>
+        <div class="menuActions"><button class="primaryBtn" id="playBtn">▶ &nbsp; PLAY SOLO <span>INSTANT BOTS</span></button><button class="secondaryBtn" id="lobbySettings">⚙ SETTINGS</button></div>
+        <p class="lobbyTip">12 opponents · auto-filled bots · no ads · no login</p>
+      </div>
+      <div class="lobbyPanel"><div class="panelAccent">LIVE PROTOTYPE</div><h2>THE ISLAND AWAITS</h2><div class="featureGrid"><div><strong>10</strong><small>ORIGINAL POIs</small></div><div><strong>4</strong><small>WEAPON TYPES</small></div><div><strong>12</strong><small>ENEMY BOTS</small></div><div><strong>1</strong><small>VICTORY</small></div></div><div class="line"></div><div class="statLine">🏆 Victories <b id="lobbyWins">0</b></div><div class="statLine">🎯 Total eliminations <b id="lobbyKills">0</b></div><div class="statLine">🎮 Best eliminations <b id="lobbyBest">0</b></div><div class="smallInfo">V1: Playable third-person matches. Multiplayer, cosmetics and building are planned for later versions.</div></div>
+    </div>
+    <div class="lobbyFooter">PROJECT GPT IS AN ORIGINAL FAN-MADE GAME PROTOTYPE · NOT AFFILIATED WITH EPIC GAMES</div>
+  </section>
+
+  <section id="hud" class="hidden" aria-label="Game interface">
+    <div id="topBar"><div class="gameBadge"><span>PROJECT GPT</span><small>CH2 · S2</small></div><div class="topRight"><div class="statusPill">✖ <b id="killCount">0</b></div><div class="statusPill">♟ <b id="aliveCount">13</b></div><div class="statusPill stormPill">◉ <b id="stormClock">03:30</b></div><button id="pauseBtn" class="pauseSmall" aria-label="Pause">Ⅱ</button></div></div>
+    <div id="poiBanner" class="poiBanner hidden">COMMAND CENTER</div>
+    <canvas id="minimap" width="176" height="176" aria-label="Minimap"></canvas>
+    <div id="feed"></div>
+    <div class="crosshair" id="crosshair"><i></i><i></i><i></i><i></i><span></span></div>
+    <div id="hitMark" class="hitMark hidden">✕</div>
+    <div id="damageVignette"></div>
+    <div id="bottomHud"><div class="healthGroup"><div class="bars"><div class="bar shieldBar"><div id="shieldFill"></div><span>🛡 <b id="shieldText">100</b></span></div><div class="bar lifeBar"><div id="healthFill"></div><span>✚ <b id="healthText">100</b></span></div></div></div><div class="weaponGroup"><div id="weaponLabel">ASSAULT RIFLE</div><div class="ammoRow"><strong id="ammoText">30</strong><span>/</span><small id="reserveText">120</small></div><small id="weaponHint">Tap weapon button to switch</small></div></div>
+    <div id="objectiveToast" class="objectiveToast hidden"></div>
+    <div id="touchControls">
+      <div id="movePad" class="movePad"><div class="joystickRing"><div id="moveKnob" class="joystickKnob"></div></div></div>
+      <div id="actionPad"><button id="touchReload" class="gameAction smallAction" aria-label="Reload">↻<small>RELOAD</small></button><button id="touchJump" class="gameAction smallAction" aria-label="Jump">↑<small>JUMP</small></button><button id="touchCrouch" class="gameAction smallAction" aria-label="Crouch">↧<small>CROUCH</small></button><button id="touchWeapon" class="gameAction smallAction" aria-label="Change weapon">⇄<small>WEAPON</small></button><button id="touchSprint" class="gameAction smallAction" aria-label="Sprint">⚡<small>RUN</small></button><button id="touchFire" class="gameAction fireAction" aria-label="Fire">⊕<small>FIRE</small></button></div>
+    </div>
+    <div id="desktopTip">WASD MOVE · MOUSE LOOK · CLICK FIRE · SPACE JUMP · SHIFT RUN · R RELOAD · 1–4 WEAPONS · ESC PAUSE</div>
+  </section>
+
+  <section id="pauseOverlay" class="overlay modalOverlay hidden" aria-label="Pause menu"><div class="modal"><div class="eyebrow">PROJECT GPT</div><h2>PAUSED</h2><button class="primaryBtn" id="resumeBtn">▶ RESUME MATCH</button><button class="secondaryBtn" id="pauseSettings">⚙ SETTINGS</button><button class="secondaryBtn warning" id="leaveBtn">↩ LEAVE MATCH</button></div></section>
+  <section id="settingsOverlay" class="overlay modalOverlay hidden" aria-label="Settings"><div class="modal settingsModal"><div class="eyebrow">CONTROL YOUR GAME</div><h2>SETTINGS</h2>
+    <label>GRAPHICS <select id="qualitySetting"><option value="low">LOW · performance</option><option value="medium" selected>MEDIUM</option><option value="high">HIGH</option></select></label>
+    <label>CAMERA SENSITIVITY <input type="range" id="sensitivitySetting" min="0.4" max="2.4" value="1.15" step="0.05"><output id="sensValue">1.15</output></label>
+    <label>BOT DIFFICULTY <select id="difficultySetting"><option value="easy">EASY</option><option value="normal" selected>NORMAL</option><option value="hard">HARD</option></select></label>
+    <label>AUTO-FIRE <input id="autoFireSetting" type="checkbox"></label>
+    <label>SHOW FPS <input id="showFpsSetting" type="checkbox"></label>
+    <div class="settingNote">For the best controls, play with your tablet in landscape mode. Drag on the right half of the screen to aim.</div><button class="primaryBtn" id="settingsDone">SAVE & BACK</button></div></section>
+  <div id="fpsCounter" class="hidden">FPS 60</div>
+  <section id="resultOverlay" class="overlay modalOverlay hidden" aria-label="Match results"><div class="resultPanel"><div id="resultIcon" class="resultIcon">🏆</div><div class="eyebrow" id="resultSub">MATCH COMPLETE</div><h2 id="resultTitle">VICTORY ROYALE!</h2><p id="resultDescription">YOU RULE THE ISLAND</p><div class="resultStats"><div><b id="resultElims">0</b><small>ELIMINATIONS</small></div><div><b id="resultPlace">#1</b><small>PLACEMENT</small></div><div><b id="resultTime">0:00</b><small>SURVIVED</small></div></div><button class="primaryBtn" id="againBtn">▶ PLAY AGAIN</button><button class="secondaryBtn" id="menuBtn">⌂ MAIN MENU</button></div></section>
+  <div id="fatal" class="hidden"><h2>Unable to load 3D engine</h2><p>Check your internet connection and refresh the page. The game loads Three.js from a public CDN.</p><button onclick="location.reload()">RETRY</button></div>
+  <script>
+  // Tell the player if the 3D library could not load (e.g. blocked internet/CDN).
+  setTimeout(() => {
+    const loading = document.getElementById('loading');
+    if (loading && !loading.classList.contains('hidden')) {
+      loading.classList.add('hidden');
+      document.getElementById('fatal').classList.remove('hidden');
+    }
+  }, 18000);
+</script>
+<script type="module" src="game.js"></script>
+</body>
+</html>
